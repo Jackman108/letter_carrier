@@ -1,0 +1,14 @@
+{
+  "require": {
+    "mongodb/mongodb": "^1.12",
+    "ext-mongodb": "^1.13",
+    "ext-curl": "*",
+    "phpmailer/phpmailer": "^6.9",
+    "telegram-bot/api": "^2.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "server/app/"
+    }
+  }
+  }
