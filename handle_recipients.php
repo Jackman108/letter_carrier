@@ -2,7 +2,7 @@
 // handle_recipients.php
 
 session_start();
-include 'db_operations.php';
+require_once 'db_operations.php';
 
 // Проверка метода запроса
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -62,4 +62,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 } else {
     die("Invalid request.");
 }
-?>
+

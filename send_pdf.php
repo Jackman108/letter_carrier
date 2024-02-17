@@ -1,8 +1,8 @@
 <?php
 //send_pdf.php
-include 'db_operations.php';
-include 'telegram_bot.php';
-include 'email_bot.php';
+require_once  'db_operations.php';
+require_once  'telegram_bot.php';
+require_once  'email_bot.php';
 
 // Connect to the database
 $conn = connectToDatabase();
@@ -23,6 +23,9 @@ if (!$pdfFilePath || !file_exists($pdfFilePath)) {
     exit;
 }
 
+// Counter for successful sends
+$successfulSends = 0;
+
 // Loop through each recipient and send the PDF
 foreach ($recipients as $recipient) {
     $recipientType = $recipient['recipient_type'];
@@ -30,14 +33,24 @@ foreach ($recipients as $recipient) {
 
     if ($recipientType === 'email') {
         // Send PDF via Email
-        sendPDFviaEmail($recipientContact, $pdfFilePath);
+        if (sendPDFviaEmail($recipientContact, $pdfFilePath)) {
+            $successfulSends++; // Increment the counter if send was successful
+        }
     } elseif ($recipientType === 'telegram') {
         // Send PDF via Telegram
-        sendPDFviaTelegram($recipientContact, $pdfFilePath);
+        if (sendPDFviaTelegram($recipientContact, $pdfFilePath)) {
+            $successfulSends++; // Increment the counter if send was successful
+        }
     }
 }
 
+// Set notification message based on successful sends
+if ($successfulSends == count($recipients)) {
+    $_SESSION['notification'] = ['type' => 'success', 'message' => 'PDF sent successfully to all recipients.'];
+} else {
+    $_SESSION['notification'] = ['type' => 'error', 'message' => 'Failed to send PDF to some recipients.'];
+}
+
 // Redirect back to index.php after sending
-$_SESSION['notification'] = ['type' => 'success', 'message' => 'PDF sent successfully to recipients.'];
 header("Location: index.php");
 exit;

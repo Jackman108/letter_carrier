@@ -3,7 +3,7 @@
 
 // Start the session
 session_start();
-
+require_once  'db_operations.php';
 
 // Check if file is uploaded successfully
 if ($_FILES['pdfFile']['error'] === UPLOAD_ERR_OK) {
@@ -26,4 +26,4 @@ if ($_FILES['pdfFile']['error'] === UPLOAD_ERR_OK) {
 } else {
     echo "Upload failed with error code: " . $_FILES['pdfFile']['error'];
 }
-?>
+

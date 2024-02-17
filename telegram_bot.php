@@ -1,14 +1,16 @@
 <?php
 //telegram_bot.php
-
+include 'telegram_webhook.php';
 // Function to send PDF via Telegram
-function sendPDFviaTelegram($chatId, $fileUrl): bool|string
+function sendPDFviaTelegram($chatId, $pdfFilePath): bool|string
 {
     $botToken = '6908090266:AAG-zOVOFUSGd3et8Sbi8ByNohmZCjiySW8';
     $url = "https://api.telegram.org/bot$botToken/sendDocument";
+
     $postData = array(
         'chat_id' => $chatId,
-        'document' => new CURLFile(realpath($fileUrl))
+        'caption' => 'Проверка работы',
+        'document' => new CURLFile(realpath($pdfFilePath))
     );
 
     $ch = curl_init();

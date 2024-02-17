@@ -2,34 +2,60 @@
 // telegram_webhook.php
 
 // Include necessary files and initialize session if needed
-include 'db_operations.php';
+require_once  'db_operations.php';
 
-// Function to handle incoming messages from Telegram webhook
+
 function handleTelegramWebhook(): void
 {
-    // Get the incoming message content
-    $update = json_decode(file_get_contents('php://input'), true);
+    try {
+        $update = json_decode(file_get_contents('php://input'), true, 512, JSON_THROW_ON_ERROR);
+    } catch (JsonException $e) {
+        // Обработка ошибки JSON, если необходимо
+    }
 
     if (isset($update['message'])) {
-        // Handle incoming message
         $message = $update['message'];
         $chatId = $message['chat']['id'];
-        $text = $message['text'];
         $pdfFilePath = null;
 
         if (isset($message['document'])) {
-            // If the message contains a document, store the file path
             $document = $message['document'];
             $fileId = $document['file_id'];
+            $mimeType = $document['mime_type'];
 
-            // Store the message in the database
-            storeMessageInDatabase($chatId, $text, $pdfFilePath);
+            // Проверяем, является ли файл PDF
+            if ($mimeType === 'application/pdf') {
+                // Получаем путь к файлу
+                $pdfFilePath = getPDFFilePath($fileId);
+            } else {
+                // Игнорируем файлы, не являющиеся PDF
+                return;
+            }
         }
+
+        // Сохраняем только путь к PDF файлу в базе данных
+        storePDFFilePathInDatabase($chatId, $pdfFilePath);
     }
 }
 
-// Function to store messages in the database
-function storeMessageInDatabase($chatId, $text, $pdfFilePath): void
+// Define the function to get PDF file path
+function getPDFFilePath($fileId)
+{
+    // Logic to retrieve the file path based on the file ID
+    // This could involve querying a database or fetching from a file system
+    // For demonstration purposes, let's assume you're storing file paths in a database
+    $conn = connectToDatabase();
+    $collection = $conn->selectCollection('pdf_files');
+    $document = $collection->findOne(['file_id' => $fileId]);
+    if ($document) {
+        return $document['file_path'];
+    } else {
+        return null; // Or handle the case where the file path is not found
+    }
+}
+
+// Функция для сохранения пути к PDF файлу в базе данных
+function storePDFFilePathInDatabase($chatId, $pdfFilePath): void
 {
     try {
         $conn = connectToDatabase();
@@ -37,21 +63,20 @@ function storeMessageInDatabase($chatId, $text, $pdfFilePath): void
 
         $insertOneResult = $collection->insertOne([
             'chat_id' => $chatId,
-            'text' => $text,
             'pdf_file_path' => $pdfFilePath,
             'timestamp' => new MongoDB\BSON\UTCDateTime()
         ]);
 
         if ($insertOneResult->getInsertedCount() === 1) {
-            echo "Message and PDF file stored successfully.";
+            echo "PDF file path stored successfully.";
         } else {
-            echo "Failed to store message and PDF file.";
+            echo "Failed to store PDF file path.";
         }
     } catch (RuntimeException $e) {
-        echo "Failed to store message and PDF file: " . $e->getMessage();
+        echo "Failed to store PDF file path: " . $e->getMessage();
     }
 }
 
-// Handle incoming messages from Telegram webhook
+// Вызываем функцию обработки вебхука
 handleTelegramWebhook();
-?>
+

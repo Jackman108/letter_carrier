@@ -2,7 +2,7 @@
 //edit_recipients.php
 
 session_start();
-include 'db_operations.php';
+require_once  'db_operations.php';
 
 // Connect to the database
 $conn = connectToDatabase();

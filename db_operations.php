@@ -93,4 +93,3 @@ function deleteRecipientFromDatabase(Database $conn, string $recipientId): bool
         exit("Failed to delete recipient from the database: " . $e->getMessage());
     }
 }
-?>
