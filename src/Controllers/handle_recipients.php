@@ -1,8 +1,9 @@
 <?php
-// handle_recipients.php
+// src/Controllers/handle_recipients.php
 
 session_start();
-require_once 'db_operations.php';
+require_once __DIR__ .'/../Models/db_operations.php';
+require __DIR__ .'/../../config/db_config.php';
 
 // Проверка метода запроса
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

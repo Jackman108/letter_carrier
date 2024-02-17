@@ -1,9 +1,9 @@
 <?php
-// upload_pdf.php
+// src/Controllers/upload_pdf.php
 
 // Start the session
 session_start();
-require_once  'db_operations.php';
+require_once __DIR__ .'/../Models/db_operations.php';
 
 // Check if file is uploaded successfully
 if ($_FILES['pdfFile']['error'] === UPLOAD_ERR_OK) {
@@ -18,7 +18,7 @@ if ($_FILES['pdfFile']['error'] === UPLOAD_ERR_OK) {
         $_SESSION['pdf_file_path'] = $uploadFile;
 
         // Redirect back to index.php after uploading
-        header("Location: index.php?uploaded_file=" . urlencode(basename($_FILES['pdfFile']['name'])));
+        header("Location: ../../index.php?uploaded_file=" . urlencode(basename($_FILES['pdfFile']['name'])));
         exit;
     } else {
         echo "Upload failed.";

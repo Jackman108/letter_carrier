@@ -1,8 +1,8 @@
 <?php
-// db_operations.php
+// src/Models/db_operations.php
 
-require 'vendor/autoload.php';
-require 'db_config.php';
+require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/../../config/db_config.php';
 
 use MongoDB\Client;
 use MongoDB\Collection;

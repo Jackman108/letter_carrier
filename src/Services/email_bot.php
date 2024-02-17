@@ -1,26 +1,25 @@
 <?php
-//email_bot.php
+//src/Services/email_bot.php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
+require '../../vendor/autoload.php';
+require_once '../../config/config.php';
+
 // Function to send PDF via Email
-
 function sendPDFviaEmail($recipientEmail, $pdfFilePath): bool {
+    global $config;
 
-    // Подключаем библиотеку PHPMailer
-    require 'vendor/autoload.php';
-
-    // Создаем экземпляр класса PHPMailer
     $mail = new PHPMailer();
-
-    // Настройки SMTP
     $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com'; // Укажите адрес вашего SMTP-сервера
+    $mail->Host = $config['smtpHost'];
     $mail->SMTPAuth = true;
-    $mail->Username = 'dev.js.eugene@gmail.com'; // Укажите вашу электронную почту
-    $mail->Password = 'imkj xour sxnv okiq'; // Укажите пароль от вашей почты
+    $mail->Username = $config['smtpUsername'];
+    $mail->Password = $config['smtpPassword'];
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587; // Порт SMTP
+    $mail->Port = $config['smtpPort'];
+
 
     // Устанавливаем отправителя и получателя
     $mail->setFrom ('dev.js.eugene@gmail.com', 'Eugene'); // Укажите ваше имя и адрес электронной почты

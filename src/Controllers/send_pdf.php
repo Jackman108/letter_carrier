@@ -1,8 +1,8 @@
 <?php
-//send_pdf.php
-require_once  'db_operations.php';
-require_once  'telegram_bot.php';
-require_once  'email_bot.php';
+//src/Controllers/send_pdf.php
+require_once __DIR__ .'/../Models/db_operations.php';
+require_once __DIR__ .'/../Services/telegram_bot.php';
+require_once __DIR__ .'/../Services/email_bot.php';
 
 // Connect to the database
 $conn = connectToDatabase();
@@ -19,7 +19,7 @@ $pdfFilePath = $_SESSION['pdf_file_path'] ?? '';
 // Check if PDF file path exists
 if (!$pdfFilePath || !file_exists($pdfFilePath)) {
     $_SESSION['notification'] = ['type' => 'error', 'message' => 'PDF file not found.'];
-    header("Location: index.php");
+    header("Location: ../../index.php");
     exit;
 }
 
@@ -52,5 +52,5 @@ if ($successfulSends == count($recipients)) {
 }
 
 // Redirect back to index.php after sending
-header("Location: index.php");
+header("Location: ../../index.php");
 exit;

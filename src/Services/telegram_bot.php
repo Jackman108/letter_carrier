@@ -1,6 +1,8 @@
 <?php
-//telegram_bot.php
-include 'telegram_webhook.php';
+//src/Services/telegram_bot.php
+
+require_once __DIR__ .'/../Controllers/telegram_webhook.php';
+
 // Function to send PDF via Telegram
 function sendPDFviaTelegram($chatId, $pdfFilePath): bool|string
 {

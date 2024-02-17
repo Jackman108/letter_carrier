@@ -1,8 +1,8 @@
 <?php
-// telegram_webhook.php
+// src/Controllers/telegram_webhook.php
 
 // Include necessary files and initialize session if needed
-require_once  'db_operations.php';
+require_once __DIR__ .'/../Models/db_operations.php';
 
 
 function handleTelegramWebhook(): void

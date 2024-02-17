@@ -1,5 +1,5 @@
 <?php
-// db_config.php
+// config/db_config.php
 
 $mongoUsername = 'admin';
 $mongoPassword = 'admin';
